@@ -3680,107 +3680,6 @@
         ctx.restore();
       }
 
-      // Dibujar mini-mapa en la esquina inferior derecha para ver dónde está la ballena en el océano
-      function drawMiniMap() {
-        const mw = Math.min(130, width * 0.24);
-        const mh = Math.round(mw * (WORLD_HEIGHT / WORLD_WIDTH));
-        const mx = width - mw - 14;
-        const my = height - mh - 14;
-
-        ctx.save();
-        // Marco redondeado del mini-mapa
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.strokeStyle = '#38BDF8';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.roundRect(mx - 4, my - 4, mw + 8, mh + 8, 12);
-        ctx.fill();
-        ctx.stroke();
-
-        // Cielo del mini-mapa
-        const skyH = (WATER_SURFACE_Y / WORLD_HEIGHT) * mh;
-        ctx.fillStyle = '#BAE6FD';
-        ctx.fillRect(mx, my, mw, skyH);
-
-        // Agua del mini-mapa
-        ctx.fillStyle = '#0284C7';
-        ctx.fillRect(mx, my + skyH, mw, mh - skyH);
-
-        // Arena del fondo
-        ctx.fillStyle = '#FDE047';
-        ctx.fillRect(mx, my + mh - 5, mw, 5);
-
-        // Tobogán al lado de la casa en el mini-mapa
-        const tobMiniX = mx + (TOBOGAN.x / WORLD_WIDTH) * mw;
-        const tobMiniH = (TOBOGAN.height / WORLD_HEIGHT) * mh;
-        const tobMiniY = my + mh - tobMiniH - 3;
-        const tobMiniW = (TOBOGAN.width / WORLD_WIDTH) * mw;
-        ctx.fillStyle = 'rgba(245, 158, 11, 0.9)';
-        ctx.fillRect(tobMiniX, tobMiniY, tobMiniW, tobMiniH);
-
-        // Cueva-Casa de la ballena abajo a la izquierda en el mini-mapa
-        const caveMiniW = (CAVE.doorX / WORLD_WIDTH) * mw;
-        const caveMiniH = ((CAVE.bottomY - CAVE.topY) / WORLD_HEIGHT) * mh;
-        ctx.fillStyle = CAVE.doorOpen ? 'rgba(251, 191, 36, 0.85)' : 'rgba(16, 185, 129, 0.9)';
-        ctx.fillRect(mx + 2, my + mh - caveMiniH - 3, caveMiniW, caveMiniH);
-
-        // Los 3 Barcos y tripulantes en la superficie en el mini-mapa
-        physicsBoats.forEach(b => {
-          const bMiniX = mx + (b.x / WORLD_WIDTH) * mw;
-          const bMiniY = my + (WATER_SURFACE_Y / WORLD_HEIGHT) * mh - 4;
-          ctx.fillStyle = b.isCapsized ? '#F43F5E' : '#FBBF24';
-          ctx.strokeStyle = '#FFFFFF';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.arc(bMiniX, bMiniY, 3.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-
-          // Puntito del marinero si cayó al agua
-          if (b.sailor.state === 'in_water') {
-            const sMiniX = mx + (b.sailor.x / WORLD_WIDTH) * mw;
-            ctx.fillStyle = '#FB7185';
-            ctx.beginPath();
-            ctx.arc(sMiniX, bMiniY, 2, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        });
-
-        // Rectángulo de la cámara actual (más amplio por el zoom alejado)
-        const camRectX = mx + (camera.x / WORLD_WIDTH) * mw;
-        const camRectY = my + (camera.y / WORLD_HEIGHT) * mh;
-        const camRectW = Math.min(mw, (viewW / WORLD_WIDTH) * mw);
-        const camRectH = Math.min(mh, (viewH / WORLD_HEIGHT) * mh);
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.lineWidth = 1.5;
-        ctx.strokeRect(camRectX, camRectY, camRectW, camRectH);
-
-        // Puntito del tiburón en el mini-mapa (solo si está activado)
-        if (sharkEnabled && shark.respawnTimer <= 0) {
-          const sx = mx + (shark.x / WORLD_WIDTH) * mw;
-          const sy = my + (shark.y / WORLD_HEIGHT) * mh;
-          ctx.fillStyle = shark.scared ? '#10B981' : '#E11D48';
-          ctx.strokeStyle = '#FFFFFF';
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.arc(sx, sy, 4, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-        }
-
-        // Puntito de la ballena
-        const wx = mx + (whale.x / WORLD_WIDTH) * mw;
-        const wy = my + (whale.y / WORLD_HEIGHT) * mh;
-        ctx.fillStyle = '#FF5E99';
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(wx, wy, 4.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.restore();
-      }
 
       // Dibujar un pececito colorido (con animación especial de giro y brillo si fue alcanzado por el poder)
       function drawFish(f) {
@@ -5189,9 +5088,8 @@
 
         ctx.restore();
 
-        // Indicador de borde si el tiburón viene desde fuera de la pantalla y mini-mapa
+        // Indicador de borde si el tiburón viene desde fuera de la pantalla
         drawSharkOffscreenIndicator();
-        drawMiniMap();
 
         if (screenFlash > 0) {
           ctx.fillStyle = `rgba(255, 255, 255, ${screenFlash})`;
