@@ -535,7 +535,7 @@
         oscBoing.stop(now + 0.54);
       }
 
-      // Sonido de impacto de madera y agua cuando la ballena choca el barco
+      // Sonido de impacto de madera cuando la ballena choca con el barco
       function playBoatBonkSound(impulse) {
         if (!soundEnabled) return;
         initAudio();
@@ -554,9 +554,6 @@
         gain.connect(audioCtx.destination);
         osc.start(now);
         osc.stop(now + 0.21);
-
-        // Chapuzón de agua por el golpe
-        playWaterSplashSound(true);
       }
 
       // Sonido de chapuzón al saltar fuera del agua o caer de vuelta al mar
@@ -1441,9 +1438,11 @@
         });
       }
 
-      // Crear gran salpicón de agua y espuma cuando la ballena salta fuera del agua o cae de vuelta al mar
-      function spawnWaterSplash(x, y, intensity, isPlunge) {
-        playWaterSplashSound(isPlunge);
+      // Crear gran salpicón de agua y espuma (el sonido de agua solo se reproduce si playSound es true)
+      function spawnWaterSplash(x, y, intensity, isPlunge, playSound = false) {
+        if (playSound) {
+          playWaterSplashSound(isPlunge);
+        }
         const dropCount = Math.min(45, Math.max(16, Math.floor(intensity * 3.2)));
         const colors = ['#FFFFFF', '#E0F2FE', '#BAE6FD', '#7DD3FC', '#38BDF8'];
 
@@ -4565,7 +4564,7 @@
                 type: 'text'
               });
             }
-            spawnWaterSplash(whale.x, WATER_SURFACE_Y, launchSpeed, false);
+            spawnWaterSplash(whale.x, WATER_SURFACE_Y, launchSpeed, false, true);
           } else {
             // Si iba despacito, se queda flotando en la superficie sin saltar al aire
             whale.y = WATER_SURFACE_Y;
@@ -4574,7 +4573,7 @@
         } else if (wasInAir && !isNowInAir) {
           // ¡Cayó de vuelta al agua después del salto!
           const impactSpeed = Math.hypot(whale.vx, whale.vy);
-          spawnWaterSplash(whale.x, WATER_SURFACE_Y, impactSpeed, true);
+          spawnWaterSplash(whale.x, WATER_SURFACE_Y, impactSpeed, true, true);
           // El agua frena suavemente la caída
           whale.vy *= 0.62;
           whale.vx *= 0.85;
