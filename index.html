@@ -53,128 +53,145 @@
     <canvas id="gameCanvas" class="block w-full h-full cursor-pointer"></canvas>
   </div>
 
-  <!-- Barra superior compacta para no tapar la visual del juego -->
+  <!-- Barra superior compacta 100% con iconos para una niña pequeña de 3 años -->
   <header class="fixed top-1 left-2 right-2 sm:top-2 sm:left-3 sm:right-3 z-20 flex flex-wrap items-center justify-between gap-1.5 pointer-events-none">
     
-    <!-- Contador de peces comidos + vida + panza + indicador de clima/hora -->
+    <!-- Contador de peces comidos + icono de etapa + vida + medidor de panza + clima -->
     <div class="pointer-events-auto flex items-center gap-1.5 sm:gap-2.5 bg-white/85 backdrop-blur-md px-2.5 py-1 sm:px-3 sm:py-1 rounded-full shadow-md border-2 border-sky-300/80">
-      <span class="text-lg sm:text-xl" aria-hidden="true">🐳</span>
+      <span id="whaleStageIcon" class="text-lg sm:text-xl select-none" aria-hidden="true">👶</span>
       <div class="flex items-center gap-1">
         <span id="scoreDisplay" class="text-lg sm:text-xl font-black text-sky-600 tracking-tight">0</span>
-        <span class="text-sm sm:text-base" aria-hidden="true">🐟</span>
+        <span class="text-sm sm:text-base select-none" aria-hidden="true">🐟</span>
       </div>
       <!-- Barra de Vida (Corazón) -->
-      <div class="flex items-center gap-1 pl-1.5 border-l border-sky-200" title="Vida de la ballena">
-        <span class="text-xs sm:text-sm" aria-hidden="true">❤️</span>
+      <div class="flex items-center gap-1 pl-1.5 border-l border-sky-200">
+        <span class="text-xs sm:text-sm select-none" aria-hidden="true">❤️</span>
         <div class="w-12 sm:w-16 h-2 sm:h-2.5 bg-rose-100 rounded-full overflow-hidden border border-rose-300 p-0.5">
           <div id="healthBar" class="h-full bg-gradient-to-r from-rose-500 to-emerald-400 rounded-full transition-all duration-200" style="width: 100%"></div>
         </div>
       </div>
-      <!-- Medidor de panza hasta explotar (con marca donde el tiburón te tiene miedo) -->
-      <div class="flex items-center gap-1 pl-1.5 border-l border-sky-200" title="¡Tamaño! Si pasás la rayita amarilla, el tiburón huye de vos">
-        <span class="text-xs sm:text-sm" aria-hidden="true">🎈</span>
+      <!-- Medidor de panza hasta la explosión cómica (con marca amarilla donde el tiburón huye) -->
+      <div class="flex items-center gap-1 pl-1.5 border-l border-sky-200">
+        <span class="text-xs sm:text-sm select-none" aria-hidden="true">🎈</span>
         <div class="relative w-12 sm:w-16 h-2 sm:h-2.5 bg-sky-100 rounded-full overflow-hidden border border-sky-300 p-0.5">
           <div id="bellyBar" class="h-full bg-gradient-to-r from-sky-400 via-pink-400 to-rose-500 rounded-full transition-all duration-200" style="width: 0%"></div>
-          <div class="absolute top-0 bottom-0 w-0.5 bg-amber-400" style="left: 35%" title="Tamaño para asustar al tiburón"></div>
+          <div class="absolute top-0 bottom-0 w-0.5 bg-amber-400" style="left: 35%"></div>
         </div>
       </div>
-      <!-- Indicador interactivo de ciclo del día y clima -->
-      <button type="button" id="timeWeatherBadge" class="kid-btn flex items-center gap-1 pl-1.5 pr-1 py-0.5 rounded-full hover:bg-sky-100/70 border-l border-sky-200 text-xs font-bold text-sky-700 cursor-pointer select-none transition-colors" title="Ciclo del día y clima actual (Tocá para cambiar clima)">
+      <!-- Indicador interactivo de ciclo del día y clima (solo icono) -->
+      <button type="button" id="timeWeatherBadge" class="kid-btn flex items-center pl-1.5 pr-1 py-0.5 rounded-full hover:bg-sky-100/70 border-l border-sky-200 text-sm font-bold text-sky-700 cursor-pointer select-none transition-colors">
         <span id="timeWeatherIcon">☀️</span>
-        <span id="timeWeatherText" class="hidden sm:inline">Mañana</span>
+        <span id="timeWeatherText" class="hidden"></span>
       </button>
-      <!-- Indicador de estado del tiburón (oculto cuando el tiburón está desactivado) -->
-      <div id="sharkStatusBadge" class="hidden items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-700 border border-rose-300">
+      <!-- Indicador de estado del tiburón (solo iconos) -->
+      <div id="sharkStatusBadge" class="hidden items-center gap-1 px-2 py-0.5 rounded-full text-xs font-extrabold bg-rose-100 text-rose-700 border border-rose-300">
         <span>🦈</span>
-        <span id="sharkStatusText">Te persigue</span>
+        <span id="sharkStatusText">💥</span>
       </div>
       <!-- Mini contador de colores comidos -->
       <div id="colorPills" class="hidden md:flex items-center gap-1 pl-1.5 border-l border-sky-200"></div>
     </div>
 
-    <!-- Botones de acción compactos -->
+    <!-- Botones de acción compactos (100% iconos para niña de 3 años) -->
     <div class="pointer-events-auto flex items-center gap-1 sm:gap-1.5">
-      <!-- Botón para abrir o cerrar la puerta de la Cueva-Casa de la ballena -->
-      <button id="btnCaveDoor" type="button" title="Abrir o cerrar la puerta de la cueva de la ballena" aria-label="Abrir o cerrar puerta de la cueva"
+      <!-- Botón para abrir o cerrar la puerta de la Cueva: Casa + Candado -->
+      <button id="btnCaveDoor" type="button"
         class="kid-btn flex items-center gap-1 bg-amber-500 hover:bg-amber-400 text-white font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md border-2 border-white text-xs sm:text-sm">
         <span class="text-sm sm:text-base">🏠</span>
-        <span id="caveDoorLabel">Puerta: Abierta</span>
+        <span id="caveDoorLabel" class="text-sm sm:text-base">🔓</span>
       </button>
 
-      <!-- Opción para activar o desactivar el tiburón (Desactivada por defecto) -->
-      <button id="btnToggleShark" type="button" title="Hacer aparecer o desaparecer al tiburón" aria-label="Activar o desactivar tiburón"
+      <!-- Botón para activar o desactivar el tiburón: Tiburón + Tilde/Cruz -->
+      <button id="btnToggleShark" type="button"
         class="kid-btn flex items-center gap-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md border-2 border-white text-xs sm:text-sm">
         <span class="text-sm sm:text-base">🦈</span>
-        <span id="sharkToggleLabel">Tiburón: NO</span>
+        <span id="sharkToggleLabel" class="text-sm sm:text-base">❌</span>
       </button>
 
-      <button id="btnMoreFish" type="button" title="¡Lluvia de peces!" aria-label="Más peces"
+      <!-- Botón para lluvia de más peces: Pez + Signo Más -->
+      <button id="btnMoreFish" type="button"
         class="kid-btn flex items-center gap-1 bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md border-2 border-white text-xs sm:text-sm">
         <span class="text-sm sm:text-base">🐠</span>
-        <span class="hidden md:inline">+Peces</span>
+        <span class="text-xs sm:text-sm font-black">➕</span>
       </button>
 
-      <button id="btnWhaleColor" type="button" title="Cambiar color de la ballena" aria-label="Cambiar color de la ballena"
-        class="kid-btn flex items-center gap-1 bg-pink-400 hover:bg-pink-300 text-white font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md border-2 border-white text-xs sm:text-sm">
-        <span class="text-sm sm:text-base">🎨</span>
-        <span class="hidden sm:inline">Color</span>
+      <!-- Botón para cambiar paleta de colores de la ballena: Paleta de pintor -->
+      <button id="btnWhaleColor" type="button"
+        class="kid-btn flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 bg-pink-400 hover:bg-pink-300 text-white font-bold rounded-full shadow-md border-2 border-white text-sm sm:text-base">
+        <span>🎨</span>
       </button>
 
-      <button id="btnSpout" type="button" title="¡Hacer chorrito de agua!" aria-label="Hacer chorrito de agua"
-        class="kid-btn flex items-center gap-1 bg-cyan-400 hover:bg-cyan-300 text-cyan-950 font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md border-2 border-white text-xs sm:text-sm">
-        <span class="text-sm sm:text-base">⛲</span>
-        <span class="hidden sm:inline">Chorro</span>
+      <!-- Botón para hacer chorrito de agua: Fuente de agua -->
+      <button id="btnSpout" type="button"
+        class="kid-btn flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 bg-cyan-400 hover:bg-cyan-300 text-cyan-950 font-bold rounded-full shadow-md border-2 border-white text-sm sm:text-base">
+        <span>⛲</span>
       </button>
 
-      <button id="btnSound" type="button" title="Activar o desactivar sonidos" aria-label="Sonido"
+      <!-- Botón para silenciar o activar sonido: Altavoz -->
+      <button id="btnSound" type="button"
         class="kid-btn flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 bg-emerald-400 hover:bg-emerald-300 text-emerald-950 font-bold rounded-full shadow-md border-2 border-white text-sm sm:text-base">
         <span id="soundIcon">🔊</span>
       </button>
     </div>
   </header>
 
-  <!-- Banner de celebración cada 10 peces (no bloquea el juego) -->
-  <div id="celebrationBanner" class="fixed inset-x-0 top-20 sm:top-24 z-30 flex justify-center pointer-events-none hidden">
+  <!-- Banner de celebración (100% iconos para festejar) -->
+  <div id="celebrationBanner" class="fixed inset-x-0 top-16 sm:top-20 z-30 flex justify-center pointer-events-none hidden">
     <div class="animate-pop bg-gradient-to-r from-pink-500 via-amber-400 to-sky-500 p-1 rounded-3xl shadow-2xl">
-      <div class="bg-white px-6 py-3 rounded-[20px] flex items-center gap-3">
-        <span class="text-3xl sm:text-4xl">🎉🐳🌟</span>
-        <span id="celebrationText" class="text-xl sm:text-3xl font-black text-sky-700">¡Qué bien come la ballena!</span>
-        <span class="text-3xl sm:text-4xl">🌈💖</span>
+      <div class="bg-white px-6 py-2.5 rounded-[20px] flex items-center justify-center gap-3">
+        <span class="text-3xl sm:text-4xl">🎉</span>
+        <span id="celebrationText" class="text-2xl sm:text-3xl font-black text-sky-700">🐳 ⭐</span>
+        <span class="text-3xl sm:text-4xl">🌈</span>
       </div>
     </div>
   </div>
 
-  <!-- Pantalla de bienvenida inicial súper visual para activar el audio con 1 toque -->
-  <div id="welcomeOverlay" class="fixed inset-0 z-40 flex items-center justify-center bg-sky-900/45 backdrop-blur-sm p-4">
-    <div class="animate-float bg-white rounded-[2.5rem] p-6 sm:p-8 max-w-md w-full text-center shadow-2xl border-8 border-sky-300">
-      <div class="text-6xl sm:text-7xl mb-3">🐳🦈🐠</div>
-      <h1 class="text-2xl sm:text-4xl font-black text-sky-600 mb-2">¡La Ballena Feliz!</h1>
-      <p class="text-sky-800 font-semibold text-base sm:text-lg mb-6">
-        Comé pececitos para crecer y escapá del tiburón 🦈. ¡Tocá 2 veces rápido la pantalla para disparar un poder mágico ⚡ desde la boca!
-      </p>
+  <!-- Pantalla de bienvenida 100% visual para niños de 3 años (cero texto escrito) -->
+  <div id="welcomeOverlay" class="fixed inset-0 z-40 flex items-center justify-center bg-sky-900/50 backdrop-blur-sm p-4">
+    <div class="animate-float bg-white rounded-[2.5rem] p-6 sm:p-8 max-w-sm sm:max-w-md w-full text-center shadow-2xl border-8 border-sky-300">
+      <div class="text-6xl sm:text-7xl mb-3">🐳 🌊 ⭐</div>
+      <!-- Ciclo visual: Bebé -> Pez -> Anciana -> Explosión -> Bebé -->
+      <div class="bg-sky-50 rounded-2xl p-3 border-2 border-sky-200 mb-4 flex items-center justify-center gap-2 text-2xl sm:text-3xl">
+        <span>👶</span>
+        <span class="text-sky-400 text-xl">➡️</span>
+        <span>🐟</span>
+        <span class="text-sky-400 text-xl">➡️</span>
+        <span>👴</span>
+        <span class="text-sky-400 text-xl">➡️</span>
+        <span>💥</span>
+        <span class="text-sky-400 text-xl">➡️</span>
+        <span>👶</span>
+      </div>
+      <!-- Guía visual de juego: Doble toque para disparo mágico y cuidado con el tiburón -->
+      <div class="flex items-center justify-center gap-3 text-2xl sm:text-3xl mb-6 bg-amber-50 rounded-2xl p-2.5 border-2 border-amber-200">
+        <span>👆👆</span>
+        <span class="text-amber-500 text-xl">➡️</span>
+        <span>⚡👄</span>
+        <span class="text-slate-300">|</span>
+        <span>🦈</span>
+        <span class="text-rose-500 text-xl">❌</span>
+      </div>
+      <!-- Botón gigante de Play -->
       <button id="btnStartGame" type="button"
-        class="kid-btn w-full py-4 px-8 bg-gradient-to-r from-pink-500 to-amber-400 hover:from-pink-400 hover:to-amber-300 text-white font-black text-2xl sm:text-3xl rounded-full shadow-xl border-4 border-white flex items-center justify-center gap-3">
+        class="kid-btn w-full py-4 sm:py-5 px-8 bg-gradient-to-r from-emerald-400 via-sky-400 to-pink-500 hover:scale-105 text-white font-black text-5xl sm:text-6xl rounded-full shadow-2xl border-4 border-white flex items-center justify-center gap-3">
         <span>▶️</span>
-        <span>¡JUGAR!</span>
       </button>
     </div>
   </div>
 
-  <!-- Pantalla de Game Over cuando la vida llega a cero -->
+  <!-- Pantalla de Game Over 100% visual (cero texto escrito) -->
   <div id="gameOverOverlay" class="fixed inset-0 z-40 hidden items-center justify-center bg-slate-900/65 backdrop-blur-sm p-4">
-    <div class="animate-pop bg-white rounded-[2.5rem] p-6 sm:p-8 max-w-md w-full text-center shadow-2xl border-8 border-rose-400">
-      <div class="text-6xl sm:text-7xl mb-3">🦈💥🐳</div>
-      <h2 class="text-2xl sm:text-4xl font-black text-rose-600 mb-2">¡Te atrapó el Tiburón!</h2>
-      <p class="text-slate-700 font-bold text-base sm:text-lg mb-2">
-        ¡Se acabó la vida! Pero comiste <span id="finalScoreText" class="text-sky-600 font-black text-2xl">0</span> pececitos.
-      </p>
-      <p class="text-sky-700 font-semibold text-sm sm:text-base mb-6">
-        Acordate: cuando comés muchos peces y te hacés grandota, ¡el tiburón corre de vos!
-      </p>
+    <div class="animate-pop bg-white rounded-[2.5rem] p-6 sm:p-8 max-w-sm sm:max-w-md w-full text-center shadow-2xl border-8 border-rose-400">
+      <div class="text-6xl sm:text-7xl mb-4">🦈 💔 🐳</div>
+      <div class="bg-rose-50 rounded-2xl p-3 border-2 border-rose-200 mb-6 flex items-center justify-center gap-2 text-2xl sm:text-3xl font-black text-sky-600">
+        <span>🐟</span>
+        <span id="finalScoreText" class="text-3xl sm:text-4xl text-rose-600">0</span>
+        <span>⭐</span>
+      </div>
+      <!-- Botón gigante de volver a jugar -->
       <button id="btnRestartGame" type="button"
-        class="kid-btn w-full py-4 px-8 bg-gradient-to-r from-emerald-500 to-sky-500 hover:from-emerald-400 hover:to-sky-400 text-white font-black text-2xl sm:text-3xl rounded-full shadow-xl border-4 border-white flex items-center justify-center gap-3">
-        <span>🔄</span>
-        <span>¡OTRA VEZ!</span>
+        class="kid-btn w-full py-4 sm:py-5 px-8 bg-gradient-to-r from-emerald-400 via-sky-400 to-pink-500 hover:scale-105 text-white font-black text-5xl sm:text-6xl rounded-full shadow-2xl border-4 border-white flex items-center justify-center gap-3">
+        <span>🔄 ▶️</span>
       </button>
     </div>
   </div>
@@ -696,6 +713,29 @@
         tableAnim: 0                // Animación al usar la mesa
       };
 
+      // Cargar los 6 assets ilustrados de la ballena desde Bebé hasta Anciana
+      const whaleStageAssets = [
+        new Image(),
+        new Image(),
+        new Image(),
+        new Image(),
+        new Image(),
+        new Image()
+      ];
+      const whaleStageAssetsLoaded = [false, false, false, false, false, false];
+      for (let sIdx = 0; sIdx < 6; sIdx++) {
+        whaleStageAssets[sIdx].onload = () => { whaleStageAssetsLoaded[sIdx] = true; };
+        whaleStageAssets[sIdx].src = `ballena_etapa${sIdx + 1}.png`;
+      }
+
+      // 6 Etapas de vida de la ballena: Bebé -> Infantil -> Joven -> Adulta -> Madura -> Anciana
+      // Peces necesarios en cada etapa para crecer a la siguiente:
+      const STAGE_FISH_REQUIRED = [8, 10, 12, 14, 16, 18];
+      // Radios base correspondientes a cada etapa:
+      const STAGE_RADII = [38, 48, 60, 74, 90, 108];
+      // Emojis representativos de cada etapa para las partículas de evolución
+      const STAGE_EMOJIS = ['👶', '🧒', '🧑', '🐳', '👨‍✈️', '👴'];
+
       // Asset ilustrado del interior de la Cueva-Casa (con heladera, cocina, mesa, lámpara y alfombra)
       const caveHomeAsset = new Image();
       let caveHomeAssetLoaded = false;
@@ -881,8 +921,11 @@
         targetY: 1200,
         vx: 0,
         vy: 0,
-        baseRadius: 40,
-        radius: 40,
+        stageIndex: 0,    // 0: Bebé, 1: Infantil, 2: Joven, 3: Adulta, 4: Madura, 5: Anciana
+        stageEaten: 0,    // Peces comidos en la etapa actual
+        cycleCount: 0,    // Cantidad de ciclos de vida completados (Bebé -> Anciana -> ¡BOOM!)
+        baseRadius: 38,   // Radio de la ballena bebé inicial
+        radius: 38,
         maxHp: 100,
         hp: 100,
         hurtTimer: 0,     // Invulnerabilidad breve después de un mordisco
@@ -901,6 +944,21 @@
         dizzyTimer: 0,    // Expresión de "¡Ay!" recién golpeada
         bumpSpinPhase: 0  // Fase de las estrellitas dando vueltas alrededor del chichón
       };
+
+      // Función para calcular el progreso del ciclo de vida global para la barra de panza
+      function getLifeCycleProgress() {
+        let eatenTotal = 0;
+        let requiredTotal = 0;
+        for (let s = 0; s < STAGE_FISH_REQUIRED.length; s++) {
+          requiredTotal += STAGE_FISH_REQUIRED[s];
+          if (s < whale.stageIndex) {
+            eatenTotal += STAGE_FISH_REQUIRED[s];
+          } else if (s === whale.stageIndex) {
+            eatenTotal += Math.min(whale.stageEaten, STAGE_FISH_REQUIRED[s]);
+          }
+        }
+        return Math.min(1, eatenTotal / requiredTotal);
+      }
 
       // Estado del Tiburón Enemigo (tiene vida, te persigue si sos chica, y escapa lento solo cuando te acercás si sos grande)
       const shark = {
@@ -1522,7 +1580,7 @@
           size: 28,
           color: '#FEF08A',
           strokeColor: '#E11D48',
-          text: '¡AY! ¡QUÉ CHICHÓN! 🤕💫',
+          text: '🤕💫⭐',
           alpha: 1.35,
           type: 'text'
         });
@@ -1647,7 +1705,7 @@
           size: fish.sizeType === 'big' ? 24 : 19,
           color: '#FFFFFF',
           strokeColor: fish.color.fin,
-          text: '¡ÑAM!',
+          text: '😋💖',
           alpha: 1,
           type: 'text'
         });
@@ -1664,22 +1722,16 @@
           const pill = document.createElement('div');
           pill.className = 'flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-extrabold text-white shadow-sm';
           pill.style.backgroundColor = c.main;
-          pill.title = `Peces color ${c.name}: ${colorCounts[c.id]}`;
           pill.textContent = colorCounts[c.id];
           colorPills.appendChild(pill);
         });
       }
 
-      // Mostrar festejo cada 15 peces
+      // Mostrar festejo cada 15 peces (100% iconos para niña pequeña)
       function showMilestoneCelebration(total) {
         playFanfareSound();
         triggerWhaleSpout();
-        const messages = [
-          `¡${total} pececitos comidos! ¡Bravo!`,
-          `¡Qué panzada! ¡${total} pececitos!`,
-          `¡Súper Ballena Exploradora! ¡${total}!`
-        ];
-        celebrationText.textContent = messages[(Math.floor(total / 15) - 1) % messages.length];
+        celebrationText.textContent = `🎉 🐟 ${total} ⭐`;
         celebrationBanner.classList.remove('hidden');
         if (celebrationTimeout) clearTimeout(celebrationTimeout);
         celebrationTimeout = setTimeout(() => {
@@ -1767,7 +1819,7 @@
           );
         }
 
-        // Cartel gigante de ¡BOOOOM! en el lugar de la explosión
+        // Cartel gigante de explosión con emojis en el lugar de la explosión
         particles.push({
           x: exX,
           y: exY - 25,
@@ -1777,17 +1829,25 @@
           size: 46,
           color: '#FEF08A',
           strokeColor: '#E11D48',
-          text: '¡BOOOOM! 💥🐳',
+          text: '💥🎈🌟',
           alpha: 1.6,
           type: 'text'
         });
 
-        // Reiniciar tamaño de la ballena a chiquita mientras sale girando de la nube
+        // Reiniciar la ballena a BEBÉ después de la explosión cómica
+        whale.stageIndex = 0;
+        whale.stageEaten = 0;
+        whale.cycleCount++;
         whale.bellyPoints = 0;
         whale.growthScale = 1;
-        whale.radius = whale.baseRadius;
-        whale.scaleBounce = 0.15;
+        whale.radius = STAGE_RADII[0];
+        whale.scaleBounce = 0.2;
         whale.happyTimer = 90;
+
+        // Actualizar el icono de la etapa en el encabezado
+        const stageIconEl = document.getElementById('whaleStageIcon');
+        if (stageIconEl) stageIconEl.textContent = STAGE_EMOJIS[0];
+
         // La explosión también empuja lejos al tiburón para darle ventaja al volver a ser chiquita
         const sdx = shark.x - whale.x;
         const sdy = shark.y - whale.y;
@@ -1800,7 +1860,7 @@
         }
         updateHealthAndSharkUI();
 
-        celebrationText.textContent = '¡BOOOOM! ¡Explotó de tan gorda y volvió a ser chiquita!';
+        celebrationText.textContent = '💥 🎈 ➡️ 👶 🐳';
         celebrationBanner.classList.remove('hidden');
         if (celebrationTimeout) clearTimeout(celebrationTimeout);
         celebrationTimeout = setTimeout(() => {
@@ -2059,8 +2119,8 @@
               sailor.angle = 0;
               spawnWaterSplash(sailor.x, sWaterY, Math.max(7, Math.abs(sailor.vy) * 1.6), true);
 
-              // Burbujitas y cartel cómico al zambullirse
-              const splashWords = ['¡CHAPUZÓN! 💦', '¡AL AGUA PATO! 🦆', '¡GLUB GLUB! 🫧', '¡FRESQUITA! 🏊'];
+              // Burbujitas y cartel cómico al zambullirse (solo emojis para niños)
+              const splashWords = ['💦🫧', '🦆💦', '🫧🏊', '💦✨'];
               particles.push({
                 type: 'text',
                 text: splashWords[Math.floor(Math.random() * splashWords.length)],
@@ -2097,10 +2157,10 @@
               if (distToBoat < 80 && sailor.waterTimer > 280) {
                 sailor.state = 'on_boat';
                 sailor.angle = boat.angle;
-                // Exclamación feliz
+                // Exclamación feliz con emojis
                 particles.push({
                   type: 'text',
-                  text: '¡A BORDO! ⚓',
+                  text: '⚓👨‍✈️',
                   x: sailor.x,
                   y: boat.y - 60,
                   vx: 0,
@@ -2459,10 +2519,10 @@
 
         if (caveDoorLabel && btnCaveDoor) {
           if (CAVE.doorOpen) {
-            caveDoorLabel.textContent = 'Puerta: Abierta 🔓';
+            caveDoorLabel.textContent = '🔓';
             btnCaveDoor.className = 'kid-btn flex items-center gap-1 bg-amber-500 hover:bg-amber-400 text-white font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md border-2 border-white text-xs sm:text-sm';
           } else {
-            caveDoorLabel.textContent = 'Puerta: Cerrada 🔒';
+            caveDoorLabel.textContent = '🔒';
             btnCaveDoor.className = 'kid-btn flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md border-2 border-white text-xs sm:text-sm';
             // Si el tiburón estaba adentro justo cuando cerrás la puerta, lo saca afuera
             if (shark.x < CAVE.doorX + shark.radius + 25 && shark.y > CAVE.topY - 40) {
@@ -2481,7 +2541,7 @@
           size: 26,
           color: '#FEF08A',
           strokeColor: '#0F172A',
-          text: CAVE.doorOpen ? '¡PUERTA ABIERTA! 🔓🏠' : '¡PUERTA CERRADA! ¡TIBURÓN AFUERA! 🔒🏠',
+          text: CAVE.doorOpen ? '🔓🏠' : '🔒🏠',
           alpha: 1.35,
           type: 'text'
         });
@@ -2516,7 +2576,7 @@
             size: 26,
             color: '#BAE6FD',
             strokeColor: '#0284C7',
-            text: '¡HELADERA ABIERTA! 🍦🍉 +20 VIDA',
+            text: '🍦🍉❤️➕',
             alpha: 1.4,
             type: 'text'
           });
@@ -2537,7 +2597,7 @@
             size: 26,
             color: '#FDE047',
             strokeColor: '#B45309',
-            text: '¡COCINANDO SOPITA RICA! 🍲🔥',
+            text: '🍲🔥✨',
             alpha: 1.4,
             type: 'text'
           });
@@ -2557,7 +2617,7 @@
             size: 26,
             color: '#FBCFE8',
             strokeColor: '#BE185D',
-            text: '¡A COMER EN LA MESA! 🧁🍎❤️',
+            text: '🧁🍎❤️',
             alpha: 1.4,
             type: 'text'
           });
@@ -3408,11 +3468,11 @@
           if (!sharkEnabled) {
             sharkStatusBadge.className = 'hidden items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold';
           } else if (shark.scared) {
-            sharkStatusBadge.className = 'hidden sm:flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300';
-            sharkStatusText.textContent = '¡Huye de vos! 😱';
+            sharkStatusBadge.className = 'hidden sm:flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300';
+            sharkStatusText.textContent = '😱💨';
           } else {
-            sharkStatusBadge.className = 'hidden sm:flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-rose-100 text-rose-700 border border-rose-300';
-            sharkStatusText.textContent = 'Te persigue 🦈';
+            sharkStatusBadge.className = 'hidden sm:flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-extrabold bg-rose-100 text-rose-700 border border-rose-300';
+            sharkStatusText.textContent = '💥';
           }
         }
       }
@@ -3432,16 +3492,22 @@
         whale.targetY = whale.y;
         whale.vx = 0;
         whale.vy = 0;
+        whale.stageIndex = 0;
+        whale.stageEaten = 0;
+        whale.cycleCount = 0;
         whale.hp = whale.maxHp;
         whale.hurtTimer = 0;
         whale.bellyPoints = 0;
         whale.growthScale = 1;
-        whale.radius = whale.baseRadius;
+        whale.radius = STAGE_RADII[0];
         whale.explodingState = 'none';
         whale.explodingTimer = 0;
         whale.bumpTimer = 0;
         whale.dizzyTimer = 0;
         if (bellyBar) bellyBar.style.width = '0%';
+
+        const stageIconEl = document.getElementById('whaleStageIcon');
+        if (stageIconEl) stageIconEl.textContent = STAGE_EMOJIS[0];
 
         // Colocar el tiburón lejos y con vida completa al iniciar
         shark.x = whale.x + 750;
@@ -3635,15 +3701,15 @@
         ctx.roundRect(barX, barY, barW * hpRatio, barH, 4);
         ctx.fill();
 
-        // Cartelito sobre el tiburón cuando te acercás siendo gigante y escapa de vos
+        // Exclamación cómica en emojis sobre el tiburón cuando escapa asustado
         if (shark.scared && shark.isFleeingNow) {
-          ctx.font = '800 14px Inter, sans-serif';
+          ctx.font = '22px Inter, sans-serif';
           ctx.textAlign = 'center';
           ctx.fillStyle = '#FEF08A';
           ctx.strokeStyle = '#0F172A';
           ctx.lineWidth = 3;
-          ctx.strokeText('¡SOCORRO! 😱💦', shark.x, barY - 10);
-          ctx.fillText('¡SOCORRO! 😱💦', shark.x, barY - 10);
+          ctx.strokeText('😱💦', shark.x, barY - 10);
+          ctx.fillText('😱💦', shark.x, barY - 10);
         }
         ctx.restore();
       }
@@ -3803,12 +3869,12 @@
         ctx.restore();
       }
 
-      // Dibujar la ballena protagonista súper tierna con su gran cola de ballena
+      // Dibujar la ballena protagonista utilizando el asset ilustrado según su etapa de vida (0 a 5)
       function drawWhale() {
         const theme = WHALE_THEMES[whaleThemeIndex];
         const r = whale.radius;
         const isSwelling = whale.explodingState === 'swelling';
-        const almostFull = isSwelling || whale.bellyPoints >= MAX_BELLY_POINTS * 0.85;
+        const almostFull = isSwelling || (whale.stageIndex === 5 && whale.stageEaten >= STAGE_FISH_REQUIRED[5] * 0.85);
 
         let wobbleInflate = 0;
         let shakeOffsetX = 0;
@@ -3834,193 +3900,48 @@
         }
         ctx.rotate(whale.angle);
 
-        const tailSwing = Math.sin(whale.tailPhase) * (r * 0.26);
-        const tailBaseX = -r * 0.78;
-        const tailTipX = -r * 1.52;
-        const tailTipY = tailSwing * 0.65;
+        // Obtener el asset de la etapa actual de la ballena (0: Bebé, 1: Infantil, 2: Joven, 3: Adulta, 4: Madura, 5: Anciana)
+        const currentStage = Math.max(0, Math.min(5, whale.stageIndex));
+        const img = whaleStageAssets[currentStage];
+        const isLoaded = whaleStageAssetsLoaded[currentStage];
 
-        // 1. Pedúnculo caudal (cuerpo trasero alargado de la ballena que conecta con la cola)
-        ctx.fillStyle = theme.body;
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 3.5;
-        ctx.beginPath();
-        ctx.moveTo(tailBaseX, -r * 0.42);
-        ctx.quadraticCurveTo(-r * 1.22, -r * 0.32 + tailTipY * 0.5, tailTipX, tailTipY - r * 0.14);
-        ctx.lineTo(tailTipX, tailTipY + r * 0.16);
-        ctx.quadraticCurveTo(-r * 1.22, r * 0.38 + tailTipY * 0.5, tailBaseX, r * 0.46);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
+        // Ancho y alto proporcionales al radio de colisión
+        const drawW = r * 2.9;
+        const drawH = (img && img.width && img.height) ? (drawW * (img.height / img.width)) : (r * 2.2);
 
-        // 2. Gran Aleta Caudal de Ballena (los dos lóbulos clásicos de cola de ballena en V / mariposa)
-        ctx.save();
-        ctx.translate(tailTipX, tailTipY);
-        ctx.rotate(Math.sin(whale.tailPhase) * 0.18);
-
-        ctx.fillStyle = theme.fluke || theme.body;
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 3.5;
-        ctx.lineJoin = 'round';
-        ctx.beginPath();
-        ctx.moveTo(r * 0.08, -r * 0.1);
-        ctx.bezierCurveTo(-r * 0.18, -r * 0.55, -r * 0.58, -r * 0.92, -r * 0.82, -r * 0.78);
-        ctx.quadraticCurveTo(-r * 0.62, -r * 0.38, -r * 0.25, -r * 0.03);
-        ctx.lineTo(-r * 0.15, 0);
-        ctx.lineTo(-r * 0.25, r * 0.03);
-        ctx.quadraticCurveTo(-r * 0.62, r * 0.38, -r * 0.82, r * 0.78);
-        ctx.bezierCurveTo(-r * 0.58, r * 0.92, -r * 0.18, r * 0.55, r * 0.08, r * 0.1);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = theme.dark;
-        ctx.beginPath();
-        ctx.moveTo(-r * 0.02, -r * 0.06);
-        ctx.quadraticCurveTo(-r * 0.32, -r * 0.44, -r * 0.62, -r * 0.62);
-        ctx.quadraticCurveTo(-r * 0.45, -r * 0.24, -r * 0.16, 0);
-        ctx.quadraticCurveTo(-r * 0.45, r * 0.24, -r * 0.62, r * 0.62);
-        ctx.quadraticCurveTo(-r * 0.32, r * 0.44, -r * 0.02, r * 0.06);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-
-        // 3. Cuerpo redondeado de la ballena (se vuelve súper redondito como un globo a medida que crece)
-        const bellyRoundness = Math.min(1.08, 0.82 + (whale.growthScale - 1) * 0.11 + (isSwelling ? 0.12 : 0));
-        ctx.fillStyle = isSwelling && Math.floor(whale.explodingTimer / 3) % 2 === 0 ? '#FDA4AF' : theme.body;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, r * 1.12, r * bellyRoundness, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Pancita clara con rayitas de ballena
-        ctx.save();
-        ctx.beginPath();
-        ctx.ellipse(0, 0, r * 1.12, r * bellyRoundness, 0, 0, Math.PI * 2);
-        ctx.clip();
-
-        ctx.fillStyle = theme.belly;
-        ctx.beginPath();
-        ctx.ellipse(r * 0.22, r * 0.58, r * 0.95, r * 0.52, -0.08, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.strokeStyle = theme.body;
-        ctx.lineWidth = 2.5;
-        for (let i = -1; i <= 1; i++) {
-          ctx.beginPath();
-          ctx.arc(r * 0.25, r * (0.58 + i * 0.14), r * 0.65, -0.35, 0.45);
-          ctx.stroke();
+        // Filtro de color de temática seleccionado (para que el botón de paleta funcione con los assets)
+        const hueRotations = [0, 140, 85, -30, 200];
+        const hue = hueRotations[whaleThemeIndex % hueRotations.length];
+        if (hue !== 0) {
+          ctx.filter = `hue-rotate(${hue}deg) saturate(1.15)`;
         }
-        ctx.restore();
 
-        // Borde suave alrededor del cuerpo
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 3.5;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, r * 1.12, r * bellyRoundness, 0, -Math.PI * 0.78, Math.PI * 0.78);
-        ctx.stroke();
-
-        // Boca: si recién se golpeó hace boquita "¡Ay!", si hay un pez cerca la abre grande, o sonríe feliz
-        const openAmt = whale.mouthOpen;
-        if (whale.dizzyTimer > 0) {
-          ctx.fillStyle = '#9F1239';
-          ctx.beginPath();
-          ctx.ellipse(r * 0.65, r * 0.18, r * 0.14, r * 0.18, 0, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (openAmt > 0.08) {
-          ctx.fillStyle = '#9F1239';
-          ctx.beginPath();
-          ctx.ellipse(r * 0.72, r * 0.22, r * 0.28 * openAmt + 6, r * 0.32 * openAmt + 5, 0, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = '#FB7185';
-          ctx.beginPath();
-          ctx.ellipse(r * 0.72, r * 0.32, r * 0.18 * openAmt + 3, r * 0.14 * openAmt + 2, 0, 0, Math.PI * 2);
-          ctx.fill();
+        if (isLoaded) {
+          // Si está hinchándose para explotar, parpadea en color rosado cálido
+          if (isSwelling && Math.floor(whale.explodingTimer / 3) % 2 === 0) {
+            ctx.filter = 'hue-rotate(150deg) brightness(1.2)';
+          }
+          ctx.drawImage(img, -drawW * 0.5, -drawH * 0.5, drawW, drawH);
         } else {
-          ctx.strokeStyle = '#0F172A';
-          ctx.lineWidth = 4;
-          ctx.lineCap = 'round';
+          // Respaldo visual si el asset tarda en cargar
+          ctx.fillStyle = theme.body;
           ctx.beginPath();
-          ctx.arc(r * 0.56, r * 0.1, r * 0.28, 0.15 * Math.PI, 0.78 * Math.PI);
-          ctx.stroke();
-        }
-
-        // Cachete sonrojado
-        ctx.fillStyle = theme.cheek;
-        ctx.globalAlpha = 0.65;
-        ctx.beginPath();
-        ctx.ellipse(r * 0.35, r * 0.15, r * 0.18, r * 0.11, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-
-        // Ojo tierno (si se golpeó contra el piso hace ojito "> <" mareado, si está por explotar abre grande, si comió hace ^_^)
-        const eyeX = r * 0.48;
-        const eyeY = -r * 0.18;
-        if (whale.dizzyTimer > 0) {
-          // Ojito achicado de "¡Ay, me golpeé!" (> <)
-          ctx.strokeStyle = '#0F172A';
-          ctx.lineWidth = Math.max(3.5, r * 0.09);
-          ctx.lineCap = 'round';
-          ctx.lineJoin = 'round';
-          ctx.beginPath();
-          ctx.moveTo(eyeX - r * 0.12, eyeY - r * 0.1);
-          ctx.lineTo(eyeX + r * 0.08, eyeY);
-          ctx.lineTo(eyeX - r * 0.12, eyeY + r * 0.1);
-          ctx.stroke();
-        } else if (isSwelling) {
-          ctx.fillStyle = '#FFFFFF';
-          ctx.beginPath();
-          ctx.arc(eyeX, eyeY, r * 0.25, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = '#0F172A';
-          ctx.beginPath();
-          ctx.arc(eyeX, eyeY, r * 0.08, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (whale.happyTimer > 0) {
-          ctx.strokeStyle = '#0F172A';
-          ctx.lineWidth = 4.5;
-          ctx.lineCap = 'round';
-          ctx.beginPath();
-          ctx.arc(eyeX, eyeY + 4, r * 0.15, Math.PI * 1.15, Math.PI * 1.85);
-          ctx.stroke();
-        } else {
-          ctx.fillStyle = '#FFFFFF';
-          ctx.beginPath();
-          ctx.arc(eyeX, eyeY, r * 0.2, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = '#0F172A';
-          ctx.beginPath();
-          ctx.arc(eyeX + r * 0.04, eyeY, r * 0.11, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = '#FFFFFF';
-          ctx.beginPath();
-          ctx.arc(eyeX + r * 0.07, eyeY - r * 0.05, r * 0.045, 0, Math.PI * 2);
+          ctx.ellipse(0, 0, r * 1.15, r * 0.85, 0, 0, Math.PI * 2);
           ctx.fill();
         }
-
-        // Aleta lateral que saluda
-        const finFlap = Math.sin(whale.tailPhase * 1.1) * 0.22;
-        ctx.save();
-        ctx.translate(-r * 0.1, r * 0.28);
-        ctx.rotate(finFlap);
-        ctx.fillStyle = theme.dark;
-        ctx.beginPath();
-        ctx.ellipse(-r * 0.15, r * 0.18, r * 0.32, r * 0.16, -0.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        ctx.filter = 'none';
 
         // ¡CHICHÓN EN LA CABEZA cuando choca fuerte contra el piso!
         if (whale.bumpTimer > 0) {
           const bumpAppear = whale.bumpTimer > 190
             ? (210 - whale.bumpTimer) / 20
-            : Math.min(1, whale.bumpTimer / 35);
-          const pulse = 1 + Math.sin(whale.bumpSpinPhase * 2.2) * 0.09;
-          const bScale = Math.max(0.1, bumpAppear * pulse);
+            : (whale.bumpTimer < 40 ? whale.bumpTimer / 40 : 1);
+          const boingSpring = Math.sin((210 - whale.bumpTimer) * 0.35) * Math.exp(-(210 - whale.bumpTimer) * 0.035);
+          const bScale = Math.max(0.01, (bumpAppear + boingSpring * 0.45));
 
           ctx.save();
           // Ubicado arriba de la frente de la ballena
-          ctx.translate(r * 0.32, -r * bellyRoundness * 0.86);
+          ctx.translate(r * 0.32, -drawH * 0.45);
           ctx.scale(bScale, bScale);
 
           // Tallo/base del chichón rosado
@@ -4063,8 +3984,8 @@
 
           ctx.restore();
         } else if (score >= 10) {
-          // Corona o estrellita opcional cuando supera los 10 peces (si no tiene chichón)
-          drawStarShape(r * 0.15, -r * 0.85, 5, 14, 7, '#FACC15');
+          // Estrellita opcional cuando supera los 10 peces (si no tiene chichón)
+          drawStarShape(r * 0.15, -drawH * 0.46, 5, 14, 7, '#FACC15');
         }
 
         ctx.restore();
@@ -4197,7 +4118,7 @@
               size: 28,
               color: '#A7F3D0',
               strokeColor: '#065F46',
-              text: '¡SOS GIGANTE! ¡EL TIBURÓN HUYE! 🐳💪',
+              text: '🐳👑🦈💨',
               alpha: 1.4,
               type: 'text'
             });
@@ -4380,7 +4301,7 @@
                 size: 28,
                 color: '#FFE4E6',
                 strokeColor: '#E11D48',
-                text: '¡AUCH! ¡MORDISCO! 🦈💔',
+                text: '🦈💥💔',
                 alpha: 1.3,
                 type: 'text'
               });
@@ -4419,7 +4340,7 @@
                 size: 28,
                 color: '#FEF08A',
                 strokeColor: '#0284C7',
-                text: '¡TOMÁ TIBURÓN! 💥🦈',
+                text: '💥🦈💨',
                 alpha: 1.35,
                 type: 'text'
               });
@@ -4559,7 +4480,7 @@
                 size: 30,
                 color: '#FEF08A',
                 strokeColor: '#0284C7',
-                text: '¡SÚPER SALTO! 🌊🐳',
+                text: '🌈🐬⭐',
                 alpha: 1.3,
                 type: 'text'
               });
@@ -4762,7 +4683,7 @@
                   size: 32,
                   color: '#FEF08A',
                   strokeColor: '#0284C7',
-                  text: '¡TIBURÓN DERROTADO! ⚡🦈💫',
+                  text: '⚡🦈💫🏆',
                   alpha: 1.5,
                   type: 'text'
                 });
@@ -4776,7 +4697,7 @@
                   size: 24,
                   color: '#FEF08A',
                   strokeColor: '#E11D48',
-                  text: '¡ZAP! ⚡ -25',
+                  text: '⚡💥',
                   alpha: 1.2,
                   type: 'text'
                 });
@@ -4835,7 +4756,7 @@
                   size: 20,
                   color: '#FEF08A',
                   strokeColor: '#9333EA',
-                  text: '¡COSQUILLAS! ⚡🐟💫',
+                  text: '⚡🐟💫',
                   alpha: 1.2,
                   type: 'text'
                 });
@@ -4906,9 +4827,6 @@
             colorCounts[f.color.id] = (colorCounts[f.color.id] || 0) + 1;
             renderColorPills();
 
-            // Crecimiento súper lento y gradual: cada pececito suma muy poquito para que tarde mucho en llenarse
-            const growthAdd = f.sizeType === 'big' ? 1.05 : (f.sizeType === 'medium' ? 0.8 : 0.6);
-            whale.bellyPoints += growthAdd;
             // Comer pececitos también recupera un poquito de vida si el tiburón te mordió
             if (whale.hp < whale.maxHp) {
               whale.hp = Math.min(whale.maxHp, whale.hp + 1.5);
@@ -4919,16 +4837,58 @@
             fishes.splice(i, 1);
             fishes.push(createFish(Math.random() < 0.45));
 
-            const progress = Math.min(1, whale.bellyPoints / MAX_BELLY_POINTS);
-            whale.growthScale = 1 + progress * (MAX_GROWTH_SCALE - 1);
-            whale.radius = whale.baseRadius * whale.growthScale;
+            // Avanzar en la etapa de vida actual de la ballena (0: Bebé a 5: Anciana)
+            whale.stageEaten++;
 
-            if (bellyBar) {
-              bellyBar.style.width = `${Math.round(progress * 100)}%`;
+            // Si está en las etapas de Bebé a Madura (0 a 4)
+            if (whale.stageIndex < 5) {
+              const stageProg = whale.stageEaten / STAGE_FISH_REQUIRED[whale.stageIndex];
+              whale.radius = STAGE_RADII[whale.stageIndex] + (STAGE_RADII[whale.stageIndex + 1] - STAGE_RADII[whale.stageIndex]) * stageProg;
+              whale.growthScale = whale.radius / STAGE_RADII[0];
+
+              // Si comió suficientes peces para esta etapa, evoluciona a la siguiente forma
+              if (whale.stageEaten >= STAGE_FISH_REQUIRED[whale.stageIndex]) {
+                whale.stageIndex++;
+                whale.stageEaten = 0;
+                whale.radius = STAGE_RADII[whale.stageIndex];
+                whale.growthScale = whale.radius / STAGE_RADII[0];
+
+                // Actualizar icono de etapa en el encabezado
+                const stageIconEl = document.getElementById('whaleStageIcon');
+                if (stageIconEl) stageIconEl.textContent = STAGE_EMOJIS[whale.stageIndex];
+
+                // Festejo visual de evolución sin texto escrito
+                playFanfareSound();
+                triggerWhaleSpout();
+                screenFlash = 0.4;
+                particles.push({
+                  x: whale.x,
+                  y: whale.y - whale.radius - 20,
+                  vx: 0,
+                  vy: -2.0,
+                  gravity: 0,
+                  size: 34,
+                  color: '#FEF08A',
+                  strokeColor: '#0284C7',
+                  text: `✨${STAGE_EMOJIS[whale.stageIndex]}✨`,
+                  alpha: 1.5,
+                  type: 'text'
+                });
+              }
+            } else {
+              // Etapa 5 (Anciana): ya es anciana y come para llenar la panza al máximo y explotar
+              const elderProg = Math.min(1, whale.stageEaten / STAGE_FISH_REQUIRED[5]);
+              whale.radius = STAGE_RADII[5] + 36 * elderProg; // se agranda hasta 144
+              whale.growthScale = whale.radius / STAGE_RADII[0];
             }
 
-            // ¿Llegó al límite de panza llena? ¡Empieza la animación de inflado y EXPLOSIÓN!
-            if (whale.bellyPoints >= MAX_BELLY_POINTS) {
+            // Actualizar la barra de panza
+            if (bellyBar) {
+              bellyBar.style.width = `${Math.round(getLifeCycleProgress() * 100)}%`;
+            }
+
+            // ¿Llegó al límite siendo anciana? ¡Empieza la animación de hinchazón y EXPLOSIÓN!
+            if (whale.stageIndex === 5 && whale.stageEaten >= STAGE_FISH_REQUIRED[5]) {
               spawnEatCelebration(f);
               startBellyExplosionSequence();
             } else {
@@ -5035,14 +4995,14 @@
           if (weatherState.intensity > 0.3) {
             if (weatherState.current === 'rain' || weatherState.target === 'rain') {
               timeWeatherIcon.textContent = '🌧️';
-              timeWeatherText.textContent = 'Lluvia';
+              timeWeatherText.textContent = '';
             } else if (weatherState.current === 'snow' || weatherState.target === 'snow') {
               timeWeatherIcon.textContent = '❄️';
-              timeWeatherText.textContent = 'Nieve';
+              timeWeatherText.textContent = '';
             }
           } else {
             timeWeatherIcon.textContent = dayInfo.icon;
-            timeWeatherText.textContent = dayInfo.name;
+            timeWeatherText.textContent = '';
           }
         }
 
@@ -5236,14 +5196,14 @@
           if (timeWeatherIcon && timeWeatherText) {
             if (weatherState.target === 'rain') {
               timeWeatherIcon.textContent = '🌧️';
-              timeWeatherText.textContent = 'Lluvia';
+              timeWeatherText.textContent = '';
             } else if (weatherState.target === 'snow') {
               timeWeatherIcon.textContent = '❄️';
-              timeWeatherText.textContent = 'Nieve';
+              timeWeatherText.textContent = '';
             } else {
               const dayInfo = getDayCycleInfo(performance.now());
               timeWeatherIcon.textContent = dayInfo.icon;
-              timeWeatherText.textContent = dayInfo.name;
+              timeWeatherText.textContent = '';
             }
           }
         });
@@ -5255,7 +5215,7 @@
         sharkEnabled = !sharkEnabled;
         if (sharkEnabled) {
           btnToggleShark.className = 'kid-btn flex items-center gap-1 bg-rose-500 hover:bg-rose-400 text-white font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md border-2 border-white text-xs sm:text-sm';
-          sharkToggleLabel.textContent = 'Tiburón: SÍ';
+          sharkToggleLabel.textContent = '✅';
           // Hacer aparecer al tiburón a una distancia segura de la ballena
           shark.hp = shark.maxHp;
           shark.respawnTimer = 0;
@@ -5269,7 +5229,7 @@
           playSharkBiteSound();
         } else {
           btnToggleShark.className = 'kid-btn flex items-center gap-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md border-2 border-white text-xs sm:text-sm';
-          sharkToggleLabel.textContent = 'Tiburón: NO';
+          sharkToggleLabel.textContent = '❌';
           playEatSound('small', 587.33);
         }
         updateHealthAndSharkUI();
