@@ -2565,29 +2565,13 @@
 
         ctx.restore();
 
-        // 3. Borde de roca arqueado que enmarca la cueva y cartel de "CASA DE LA BALLENA"
+        // 3. Borde de roca arqueado que enmarca la cueva
         ctx.strokeStyle = '#475569';
         ctx.lineWidth = 14;
         ctx.beginPath();
         ctx.moveTo(CAVE.leftX, CAVE.topY);
         ctx.lineTo(CAVE.doorX, CAVE.topY);
         ctx.stroke();
-
-        // Cartel de madera sobre la entrada de la cueva
-        const signX = CAVE.doorX - 160;
-        const signY = CAVE.topY - 58;
-        ctx.fillStyle = '#92400E';
-        ctx.strokeStyle = '#FDE68A';
-        ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.roundRect(signX - 135, signY - 22, 270, 44, 14);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.font = '900 18px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillStyle = '#FEF08A';
-        ctx.fillText('🏠 CASA DE LA BALLENA', signX, signY + 6);
 
         ctx.restore();
       }
